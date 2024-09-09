@@ -34,7 +34,7 @@ runs:
 
     # VERIFY INPUTS: bump_operator is valid
     - name: "Exit with Error, if inputs.bump_operator '${{ inputs.bump_operator }}' is NOT one of the supported values"
-      if: ${{ ! contains(['MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'], inputs.bump_operator) }}
+      if: ${{ ! contains(fromJSON('["MAJOR", "MINOR", "PATCH", "DEV_PRERELEASE"]'), inputs.bump_operator) }}
       run: |
         echo "[ERROR] Input 'bump_operator' must be one of 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'. Instead, got '${{ inputs.bump_operator }}'."
         echo "Exiting with error."
@@ -44,6 +44,9 @@ runs:
     # BUMP VERSION
     - name: "BUMP VERSION"
       id: bump_version
+      env:
+        SEM_VER: ${{ inputs.sem_ver }}
+        BUMP_OPERATOR: ${{ inputs.bump_operator }}
       run: |
         IFS='-' read -r version prerelease <<< "${SEM_VER}"
         IFS='.' read -r -a semver_parts <<< "${version}"

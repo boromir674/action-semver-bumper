@@ -1,0 +1,55 @@
+name: Test expected Sem Ver is returned, given different valid Inputs
+on:
+  workflow_call:
+    inputs:
+      test_matrix:
+        description: 'JSON Object like {"test_data": [{...}]}; the Job Matrix: A JSON object of key (factors) mapping to arrays (of test cases to run).'
+        required: true
+        type: string
+jobs:
+  test_job_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(inputs.test_matrix) }}
+      fail-fast: false  # allow Test Cases to continue running when another one fails
+    env:
+      TEST_MAIN: main
+      TEST_REPO: 'boromir674/gitops-automation'
+      _BRANCH: "emulated-feature-branch-${{ github.run_id }}"
+    steps:
+      # GIVEN valid Action Inputs and the expected Sem Ver after applying the Bump Operator
+      - name: Print Test Case Data, from evaluated Input JSON Object
+        # GIVEN a "Current" Sem Ver and a Bump Operator [MAJOR, MINOR, PATCH, DEV_PRERELEASE]
+        # GIVEN the expected Sem Ver after applying the Bump Operator
+        run: |
+          echo 'Current Sem Ver: ${{ matrix.test_data.action_inputs.sem_ver }}'
+          echo 'Bump Operator: ${{ matrix.test_data.action_inputs.bump_operator }}'
+          echo 'Expected Sem Ver: ${{ matrix.test_data.expected_semver }}'
+
+      # GIVEN a git repository, locally checked out, that is Compatible with Tests
+      - name: "Checkout Test-Compatible Repository, '${{ env.TEST_REPO }}'"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TEST_REPO }}
+          ref: ${{ env.TEST_MAIN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      # WHEN the Action runs, with valid input Sem Ver and Bump Operator
+      - name: WHEN Action Runs, with valid input Sem Ver and Bump Operator
+        id: run_action
+        uses: boromir674/action-semver-bumper@dev
+        with:
+          sem_ver: ${{ matrix.test_data.action_inputs.sem_ver }}
+          bump_operator: ${{ matrix.test_data.action_inputs.bump_operator }}
+
+      # THEN the Action should return the expected Sem Ver
+      - name: ASSERT Action returns the expected Sem Ver '${{ matrix.test_data.expected_semver }}'
+        run: |
+          if [ "${{ steps.run_action.outputs.new_sem_ver }}" = "${{ matrix.test_data.expected_semver }}" ]; then
+            echo "Action Returned Value is AS expected :)"
+          else
+            echo "Action Return Value is NOT as expected!"
+            echo [ASSERTION ERROR] "Actual: ${{ steps.run_action.outputs.new_sem_ver }} | Expected: ${{ matrix.test_data.expected_semver }}"
+            exit 1
+          fi
