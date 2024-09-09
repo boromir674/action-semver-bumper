@@ -1,0 +1,99 @@
+name: 'Semantic Version Bumper'
+author: Konstantinos Lampridis
+description: "Bump a Semantic Version given Bump Level."
+
+inputs:
+  sem_ver:
+    description: >
+      The current Semantic Version.
+    required: true
+  bump_operator:
+    description: >
+      The bump operator to apply. Valid values are 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'.
+    required: true
+
+outputs:
+  new_sem_ver:
+    description: >
+      The new Semantic Version after applying the bump operator.
+    value: ${{ steps.bump_version.outputs.new_sem_ver }}
+
+runs:
+  using: "composite"
+  steps:
+    # VERIFY INPUTS: sem_ver is a valid Semantic Version
+    - name: "VERIFY INPUTS: sem_ver '${{ inputs.sem_ver }}' is a valid Semantic Version"
+      run: |
+        if ! [[ "${{ inputs.sem_ver }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
+          echo "[ERROR] Input 'sem_ver', with value '${{ inputs.sem_ver }}', is NOT a valid Semantic Version."
+          echo "[DEBUG] Action requires a Semantic Version in the format 'X.Y.Z' or 'X.Y.Z-dev'."
+          echo "Exiting with error."
+          exit 1
+        fi
+      shell: bash
+
+    # VERIFY INPUTS: bump_operator is valid
+    - name: "Exit with Error, if inputs.bump_operator '${{ inputs.bump_operator }}' is NOT one of the supported values"
+      if: ${{ ! contains(['MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'], inputs.bump_operator) }}
+      run: |
+        echo "[ERROR] Input 'bump_operator' must be one of 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'. Instead, got '${{ inputs.bump_operator }}'."
+        echo "Exiting with error."
+        exit 1
+      shell: bash
+
+    # BUMP VERSION
+    - name: "BUMP VERSION"
+      id: bump_version
+      run: |
+        IFS='-' read -r version prerelease <<< "${SEM_VER}"
+        IFS='.' read -r -a semver_parts <<< "${version}"
+        major=${semver_parts[0]}
+        minor=${semver_parts[1]}
+        patch=${semver_parts[2]}
+
+        case "${BUMP_OPERATOR}" in
+          "MAJOR")
+            major=$((major + 1))
+            minor=0
+            patch=0
+            prerelease=""
+            ;;
+          "MINOR")
+            minor=$((minor + 1))
+            patch=0
+            prerelease=""
+            ;;
+          "PATCH")
+            patch=$((patch + 1))
+            prerelease=""
+            ;;
+          "DEV_PRERELEASE")
+            if [[ "${prerelease}" =~ ^dev([0-9]*)$ ]]; then
+              dev_number=${BASH_REMATCH[1]}
+              if [ -z "${dev_number}" ]; then
+                dev_number=0
+              fi
+              dev_number=$((dev_number + 1))
+              prerelease="dev${dev_number}"
+            else
+              prerelease="dev"
+            fi
+            ;;
+          *)
+            echo "[ERROR] Invalid bump operator."
+            exit 1
+            ;;
+        esac
+
+        if [ -n "${prerelease}" ]; then
+          new_sem_ver="${major}.${minor}.${patch}-${prerelease}"
+        else
+          new_sem_ver="${major}.${minor}.${patch}"
+        fi
+
+        echo "new_sem_ver=${new_sem_ver}" >> $GITHUB_OUTPUT
+      shell: bash
+
+branding:
+  icon: tag  # https://feathericons.com/
+  color: 'blue'  # background color of the badge: white, black, yellow, blue, green, orange, red, purple, gray-dark
