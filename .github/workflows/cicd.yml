@@ -44,7 +44,7 @@ jobs:
               "expected_semver": "1.1.0"
             },
             {
-              "name": "TEST 2a: Minor Bump from Dev Release (ie 1.0.0-dev)",
+              "name": "TEST 2b: Minor Bump from Dev Release (ie 1.0.0-dev)",
               "action_inputs": {
                 "sem_ver": "1.0.0-dev",
                 "bump_operator": "MINOR"
@@ -52,12 +52,20 @@ jobs:
               "expected_semver": "1.1.0"
             },
             {
+              "name": "TEST 2c: Minor Bump from Dev Release (ie 1.2.32-dev4)",
+              "action_inputs": {
+                "sem_ver": "1.2.32-dev4",
+                "bump_operator": "MINOR"
+              },
+              "expected_semver": "1.3.0"
+            },
+            {
               "name": "TEST 3: Patch Bump",
               "action_inputs": {
-                "sem_ver": "1.0.0",
+                "sem_ver": "1.12.4",
                 "bump_operator": "PATCH"
               },
-              "expected_semver": "1.0.1"
+              "expected_semver": "1.12.5"
             },
             {
               "name": "TEST 4a: Dev Pre-release Bump from Prod Release (ie 1.0.0)",
@@ -74,6 +82,14 @@ jobs:
                 "bump_operator": "DEV_PRERELEASE"
               },
               "expected_semver": "1.0.0-dev1"
+            },
+            {
+              "name": "TEST 4c: Dev Pre-release Bump from Dev Release (ie 1.2.1-dev2)",
+              "action_inputs": {
+                "sem_ver": "1.2.1-dev2",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.2.1-dev3"
             }
           ]
         }
