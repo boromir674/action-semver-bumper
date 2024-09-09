@@ -1,0 +1,121 @@
+# Continuous Integration / Continuous Delivery
+name: CI/CD Pipeline
+on:
+  push:
+    branches:
+      - "*"
+      # do not do CI on 'release' and 'develop' branches
+      - '!release'
+      - '!develop'
+    tags:
+      - v*.*.*
+
+jobs:
+  ### TEST Action returns 'true' in Rule-passing End-2-End Scenarios ###
+  test:
+    if: vars.OVERRIDE_UNIT_TESTS == 'true' || vars.OVERRIDE_UNIT_TESTS != 'false'
+    uses: ./.github/workflows/_test.yml
+    with:
+      test_matrix: >
+        {
+          "test_data": [
+            {
+              "name": "TEST 1a: Major Bump from Stable Release (ie >= 1.0.0)",
+              "action_inputs": {
+                "sem_ver": "1.2.3",
+                "bump_operator": "MAJOR"
+              },
+              "expected_semver": "2.0.0"
+            },
+            {
+              "name": "TEST 1b: Major Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.4.0",
+                "bump_operator": "MAJOR"
+              },
+              "expected_semver": "1.0.0"
+            },
+            {
+              "name": "TEST 2a: Minor Bump from Prod Release (ie 1.0.0)",
+              "action_inputs": {
+                "sem_ver": "1.0.0",
+                "bump_operator": "MINOR"
+              },
+              "expected_semver": "1.1.0"
+            },
+            {
+              "name": "TEST 2a: Minor Bump from Dev Release (ie 1.0.0-dev)",
+              "action_inputs": {
+                "sem_ver": "1.0.0-dev",
+                "bump_operator": "MINOR"
+              },
+              "expected_semver": "1.1.0"
+            },
+            {
+              "name": "TEST 3: Patch Bump",
+              "action_inputs": {
+                "sem_ver": "1.0.0",
+                "bump_operator": "PATCH"
+              },
+              "expected_semver": "1.0.1"
+            },
+            {
+              "name": "TEST 4a: Dev Pre-release Bump from Prod Release (ie 1.0.0)",
+              "action_inputs": {
+                "sem_ver": "1.0.0",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.0.0-dev"
+            },
+            {
+              "name": "TEST 4b: Dev Pre-release Bump from Dev Release (ie 1.0.0-dev)",
+              "action_inputs": {
+                "sem_ver": "1.0.0-dev",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.0.0-dev1"
+            }
+          ]
+        }
+
+  ### CI Checks - Quality Logic Gate ###
+  quality_gate:
+    # This Workflow implements both CI and CD, with its Jobs.
+    # So we put the Quality Gate for Dynamic Acceptance/Check here, which should be wired up to the CI Jobs.
+    if: always()
+    needs: ['test']
+    uses: boromir674/automated-workflows/.github/workflows/go-single-status.yml@v1.13.1
+    with:
+      # leverage inputs to dynamically control the Acceptance Criteria
+      # by default all job.needs Jobs must be Green
+
+      # - This Gate can be used as an abstraction between CI and CD
+      # - This Gate can be used as an abstraction CI Checks and Branch Protection Rules.Required_Checks
+
+      # - dynamically add discovered skipped Jobs to the 'allowed-skips', on branch push
+      # - on tag push all needed Jobs must succeed for Gate to pass
+      allowed-skips: ${{ ( ! startsWith(github.event.ref, 'refs/tags/v') && needs.*.result == 'skipped') || '[]' }}
+      needs_json: ${{ toJSON(needs) }}  # should never change
+
+  ### CD Signal ###
+  signal_deploy:
+    needs: quality_gate
+    if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
+    uses: ./.github/workflows/_signal_deploy.yml
+    with:
+      main_branch: ${{ vars.GIT_MAIN_BRANCH || 'main' }}
+      release_branch: ${{ vars.GIT_RELEASE_BRANCH || 'release' }}
+
+  ### Make a Github Release ###
+  gh_release:
+    needs: signal_deploy
+    if: always() && ( vars.OVERRIDE_DEPLOY == 'true' || ( vars.OVERRIDE_DEPLOY != 'false' && needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' ) )
+    uses: boromir674/automated-workflows/.github/workflows/gh-release.yml@v1.13.1
+    name: 'GH Release'
+    with:
+      tag: ${{ github.ref_name }}
+      draft: ${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME == 'TEST_DEPLOYMENT' }}
+    secrets:
+      # pass a 'Contents Read/Writen' Github Fine-grained PAT Token to identify as 'github account'
+      # OR the default 'GH_TOKEN' to identify as 'github-actions'
+      gh_token: ${{ secrets.GH_TOKEN_CONTENTS_RW }}
