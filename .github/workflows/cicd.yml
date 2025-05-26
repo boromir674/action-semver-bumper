@@ -36,6 +36,22 @@ jobs:
               "expected_semver": "1.0.0"
             },
             {
+              "name": "TEST 1c: Minor Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "MINOR"
+                },
+              "expected_semver": "0.42.0"
+            },
+            {
+              "name": "TEST 1c: Patch Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "PATCH"
+                },
+              "expected_semver": "0.41.1"
+            },
+            {
               "name": "TEST 2a: Minor Bump from Prod Release (ie 1.0.0)",
               "action_inputs": {
                 "sem_ver": "1.0.0",
