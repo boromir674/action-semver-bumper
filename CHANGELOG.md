@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
+
+## 1.0.1
+
+This Release started with adding **Automated Test Cases** for `bumping` Sem Vers below (stable) 1.0.0 version. 
+
+In the process, apart from CI improvements, a **bug was fixed**, where the `Dev PreRelease` operator was missing instructions to **add +1** on the `patch` of the sem ver.
+
+### Changes
+
+#### Fix
+- increment patch by 1 for `Dev PreRelease` operator (#9553855)
+
+#### Test
+- add Test Case for `Dev PreRelease` bump on `0.41.0` SemVer (#6d3ff24)
+- add 2 Test Cases for version `0.41.0` (#33b2fb6)
+
+#### CI
+- fix Bash syntax in CD pipeline (#bdf2f2d)
+- change `Dev PreRelease` tests output expectations (#7518089)
+- remove unused Job step (#55d9a34)
+
+#### Docs
+- fix syntax in `README.md` (#b7dce48)
+
+
 ## 1.0.0
 
 `First Stable Release`, with **9 Test Cases** and **CI/CD Pipeline**.
