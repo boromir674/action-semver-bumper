@@ -71,6 +71,7 @@ runs:
             prerelease=""
             ;;
           "DEV_PRERELEASE")
+            patch=$((patch + 1))
             if [[ "${prerelease}" =~ ^dev([0-9]*)$ ]]; then
               dev_number=${BASH_REMATCH[1]}
               if [ -z "${dev_number}" ]; then
