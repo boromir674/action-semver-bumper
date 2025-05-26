@@ -26,15 +26,6 @@ jobs:
           echo 'Bump Operator: ${{ matrix.test_data.action_inputs.bump_operator }}'
           echo 'Expected Sem Ver: ${{ matrix.test_data.expected_semver }}'
 
-      # GIVEN a git repository, locally checked out, that is Compatible with Tests
-      - name: "Checkout Test-Compatible Repository, '${{ env.TEST_REPO }}'"
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.TEST_REPO }}
-          ref: ${{ env.TEST_MAIN }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
       # WHEN the Action runs, with valid input Sem Ver and Bump Operator
       - name: WHEN Action Runs, with valid input Sem Ver and Bump Operator
         id: run_action

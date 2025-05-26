@@ -36,7 +36,15 @@ jobs:
               "expected_semver": "1.0.0"
             },
             {
-              "name": "TEST 1c: Minor Bump from Release < 1.0.0",
+              "name": "TEST 1c: Major Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "MINOR"
+                },
+              "expected_semver": "1.0.0"
+            },
+            {
+              "name": "TEST 1d: Minor Bump from Release < 1.0.0",
               "action_inputs": {
                 "sem_ver": "0.41.0",
                 "bump_operator": "MINOR"
@@ -44,7 +52,7 @@ jobs:
               "expected_semver": "0.42.0"
             },
             {
-              "name": "TEST 1c: Patch Bump from Release < 1.0.0",
+              "name": "TEST 1e: Patch Bump from Release < 1.0.0",
               "action_inputs": {
                 "sem_ver": "0.41.0",
                 "bump_operator": "PATCH"
