@@ -158,8 +158,7 @@ jobs:
   gh_release:
     needs: signal_deploy
     if: always() && ( vars.OVERRIDE_DEPLOY == 'true' || ( vars.OVERRIDE_DEPLOY != 'false' && needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' ) )
-    uses: boromir674/automated-workflows/.github/workflows/gh-release.yml@v1.13.1
-    name: 'GH Release'
+    uses: ./.github/workflows/_gh_release.yml
     with:
       tag: ${{ github.ref_name }}
       draft: ${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME == 'TEST_DEPLOYMENT' }}
