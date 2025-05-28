@@ -81,7 +81,7 @@ APPLY_OPERATOR --> NEW_SEM_VER(("`New **SEM VER**`"))
 
 ## Features
 - This Action acts as a pure Function (same input always yields same output).
-- Does one and does it well. Parsing of Conventional Commits, is out of scope!
+- **Does one thing** and does it **well**. Parsing of Conventional Commits, is out of scope!
 
 ## Inputs
 

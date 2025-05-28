@@ -45,7 +45,7 @@ jobs:
           remote_release_branch_is_tracked=true
           git branch --track "${{ env.RELEASE_BR }}" "origin/${{ env.RELEASE_BR }}" || remote_release_branch_is_tracked=false
           echo "TRACKED_RELEASE=${remote_release_branch_is_tracked}" >> $GITHUB_OUTPUT
-          if [ $remote_release_branch_is_tracked = 'false' ]]; then
+          if [ $remote_release_branch_is_tracked = 'false' ]; then
             echo "[WARN] Could not track '${{ env.RELEASE_BR }}' branch. Possibly origin/${{ env.RELEASE_BR }} has been already deleted"
           fi
 

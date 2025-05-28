@@ -36,6 +36,38 @@ jobs:
               "expected_semver": "1.0.0"
             },
             {
+              "name": "TEST 1c: Major Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "MAJOR"
+                },
+              "expected_semver": "1.0.0"
+            },
+            {
+              "name": "TEST 1d: Minor Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "MINOR"
+                },
+              "expected_semver": "0.42.0"
+            },
+            {
+              "name": "TEST 1e: Patch Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "PATCH"
+                },
+              "expected_semver": "0.41.1"
+            },
+            {
+              "name": "TEST 1f: Dev Pre-Release Bump from Release < 1.0.0",
+              "action_inputs": {
+                "sem_ver": "0.41.0",
+                "bump_operator": "DEV_PRERELEASE"
+                },
+              "expected_semver": "0.41.1-dev"
+            },
+            {
               "name": "TEST 2a: Minor Bump from Prod Release (ie 1.0.0)",
               "action_inputs": {
                 "sem_ver": "1.0.0",
@@ -73,7 +105,7 @@ jobs:
                 "sem_ver": "1.0.0",
                 "bump_operator": "DEV_PRERELEASE"
               },
-              "expected_semver": "1.0.0-dev"
+              "expected_semver": "1.0.1-dev"
             },
             {
               "name": "TEST 4b: Dev Pre-release Bump from Dev Release (ie 1.0.0-dev)",
@@ -81,7 +113,7 @@ jobs:
                 "sem_ver": "1.0.0-dev",
                 "bump_operator": "DEV_PRERELEASE"
               },
-              "expected_semver": "1.0.0-dev1"
+              "expected_semver": "1.0.1-dev1"
             },
             {
               "name": "TEST 4c: Dev Pre-release Bump from Dev Release (ie 1.2.1-dev2)",
@@ -89,7 +121,7 @@ jobs:
                 "sem_ver": "1.2.1-dev2",
                 "bump_operator": "DEV_PRERELEASE"
               },
-              "expected_semver": "1.2.1-dev3"
+              "expected_semver": "1.2.2-dev3"
             }
           ]
         }
@@ -126,8 +158,7 @@ jobs:
   gh_release:
     needs: signal_deploy
     if: always() && ( vars.OVERRIDE_DEPLOY == 'true' || ( vars.OVERRIDE_DEPLOY != 'false' && needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' ) )
-    uses: boromir674/automated-workflows/.github/workflows/gh-release.yml@v1.13.1
-    name: 'GH Release'
+    uses: ./.github/workflows/_gh_release.yml
     with:
       tag: ${{ github.ref_name }}
       draft: ${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME == 'TEST_DEPLOYMENT' }}
