@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 
+## 1.1.0
+
+### Changes
+
+#### Feature
+
+- Add case-insensitive support for bump operators. Now accepts both uppercase (e.g., 'MAJOR') and lowercase (e.g., 'major') variants.
+
+
 ## 1.0.1
 
 This Release started with adding **Automated Test Cases** for `bumping` Sem Vers below (stable) 1.0.0 version. 
