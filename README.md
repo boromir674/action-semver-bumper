@@ -129,7 +129,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump Major Version
   id: bump_major
-  uses: boromir674/action-semver-bumper@v1.0.0
+  uses: boromir674/action-semver-bumper@v1.1.0
   with:
     sem_ver: '1.0.0'
     bump_operator: 'MAJOR'  # Case-insensitive, also accepts 'major'
@@ -140,7 +140,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump Minor Version
   id: bump_minor
-  uses: boromir674/action-semver-bumper@v1.0.0
+  uses: boromir674/action-semver-bumper@v1.1.0
   with:
     sem_ver: '1.0.0'
     bump_operator: 'Minor'  # Case-insensitive, also accepts 'MINOR'
@@ -151,7 +151,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump Patch Version
   id: bump_patch
-  uses: boromir674/action-semver-bumper@v1.0.0
+  uses: boromir674/action-semver-bumper@v1.1.0
   with:
     sem_ver: '1.0.0'
     bump_operator: 'patch'  # Case-insensitive, also accepts 'PATCH'
@@ -162,7 +162,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump with Dev Prerelease
   id: bump_dev_prerelease
-  uses: boromir674/action-semver-bumper@v1.0.0
+  uses: boromir674/action-semver-bumper@v1.1.0
   with:
     sem_ver: '1.0.0'
     bump_operator: 'dev_prerelease'  # Case-insensitive, also accepts 'DEV_PRERELEASE'
