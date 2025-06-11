@@ -9,7 +9,7 @@ inputs:
     required: true
   bump_operator:
     description: >
-      The bump operator to apply. Valid values are 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'.
+      The bump operator to apply. Valid values are 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE' (case-insensitive).
     required: true
 
 outputs:
@@ -32,13 +32,16 @@ runs:
         fi
       shell: bash
 
-    # VERIFY INPUTS: bump_operator is valid
+    # VERIFY INPUTS: bump_operator is valid (case-insensitive)
     - name: "Exit with Error, if inputs.bump_operator '${{ inputs.bump_operator }}' is NOT one of the supported values"
-      if: ${{ ! contains(fromJSON('["MAJOR", "MINOR", "PATCH", "DEV_PRERELEASE"]'), inputs.bump_operator) }}
       run: |
-        echo "[ERROR] Input 'bump_operator' must be one of 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE'. Instead, got '${{ inputs.bump_operator }}'."
-        echo "Exiting with error."
-        exit 1
+        # Convert input to uppercase for comparison
+        OPERATOR_UPPER=$(echo "${{ inputs.bump_operator }}" | tr '[:lower:]' '[:upper:]')
+        if ! [[ "$OPERATOR_UPPER" =~ ^(MAJOR|MINOR|PATCH|DEV_PRERELEASE)$ ]]; then
+          echo "[ERROR] Input 'bump_operator' must be one of 'MAJOR', 'MINOR', 'PATCH', 'DEV_PRERELEASE' (case-insensitive). Instead, got '${{ inputs.bump_operator }}'."
+          echo "Exiting with error."
+          exit 1
+        fi
       shell: bash
 
     # BUMP VERSION
@@ -54,7 +57,10 @@ runs:
         minor=${semver_parts[1]}
         patch=${semver_parts[2]}
 
-        case "${BUMP_OPERATOR}" in
+        # Convert operator to uppercase for case-insensitive matching
+        OPERATOR_UPPER=$(echo "${BUMP_OPERATOR}" | tr '[:lower:]' '[:upper:]')
+
+        case "${OPERATOR_UPPER}" in
           "MAJOR")
             major=$((major + 1))
             minor=0
