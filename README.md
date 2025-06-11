@@ -88,7 +88,7 @@ APPLY_OPERATOR --> NEW_SEM_VER(("`New **SEM VER**`"))
 | Input           | Description                                                                 | Required | Default |
 |-----------------|-----------------------------------------------------------------------------|----------|---------|
 | `sem_ver`       | The current Semantic Version.                                               | `true`   |         |
-| `bump_operator` | The bump operator to apply. Valid values are `MAJOR`, `MINOR`, `PATCH`, `DEV_PRERELEASE`. | `true`   |         |
+| `bump_operator` | The bump operator to apply. Valid values are `MAJOR`, `MINOR`, `PATCH`, `DEV_PRERELEASE` (case-insensitive). | `true`   |         |
 
 ## Outputs
 
@@ -111,16 +111,18 @@ jobs:
 
       - name: Bump Semantic Version
         id: bump_version
-        uses: boromir674/action-semver-bumper@v1.0.0
+        uses: boromir674/action-semver-bumper@v1.1.0
         with:
-          sem_ver: '1.0.0'
-          bump_operator: 'MINOR'
+          sem_ver: '1.1.0'
+          bump_operator: 'MINOR'  # Case-insensitive, also accepts 'minor'
 
       - name: Get the new version
         run: echo "New Semantic Version is ${{ steps.bump_version.outputs.new_sem_ver }}"
 ```
 
-### Example
+### Examples
+
+The action supports case-insensitive bump operators, so you can use both uppercase (`MAJOR`) and lowercase (`major`) variants, or even `Major`.
 
 #### Bumping MAJOR Version
 
@@ -130,7 +132,7 @@ jobs:
   uses: boromir674/action-semver-bumper@v1.0.0
   with:
     sem_ver: '1.0.0'
-    bump_operator: 'MAJOR'
+    bump_operator: 'MAJOR'  # Case-insensitive, also accepts 'major'
 ```
 
 #### Bumping Minor Version
@@ -141,7 +143,7 @@ jobs:
   uses: boromir674/action-semver-bumper@v1.0.0
   with:
     sem_ver: '1.0.0'
-    bump_operator: 'MINOR'
+    bump_operator: 'Minor'  # Case-insensitive, also accepts 'MINOR'
 ```
 
 #### Bumping Patch Version
@@ -152,7 +154,7 @@ jobs:
   uses: boromir674/action-semver-bumper@v1.0.0
   with:
     sem_ver: '1.0.0'
-    bump_operator: 'PATCH'
+    bump_operator: 'patch'  # Case-insensitive, also accepts 'PATCH'
 ```
 
 #### Bumping with Prerelease Metadata
@@ -163,5 +165,5 @@ jobs:
   uses: boromir674/action-semver-bumper@v1.0.0
   with:
     sem_ver: '1.0.0'
-    bump_operator: 'DEV_PRERELEASE'
+    bump_operator: 'dev_prerelease'  # Case-insensitive, also accepts 'DEV_PRERELEASE'
 ```
