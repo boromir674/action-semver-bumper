@@ -8,10 +8,11 @@
 ![GitHub commits since latest release (by SemVer)](https://img.shields.io/github/commits-since/boromir674/action-semver-bumper/latest?color=blue&logo=semver&sort=semver)
 [![License](https://img.shields.io/github/license/boromir674/action-semver-bumper)](https://github.com/boromir674/action-semver-bumper/blob/main/LICENSE)
 
+---
 
 ```mermaid
 
-graph LR
+graph TB
 
 %% INPUT INFORMATION
 
@@ -90,7 +91,6 @@ SEM_VER_INCREMENT_MINOR --> NEW_SEM_VER
 SEM_VER_INCREMENT_PATCH --> NEW_SEM_VER
 SEM_VER_INCREMENT_PATCH_N_ADD_PRERELEASE_METADATA --> NEW_SEM_VER
 SEM_VER_INCREMENT_DEV_PRERELEASE_COUNTER --> NEW_SEM_VER
-
 
 ```
 
