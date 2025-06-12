@@ -77,8 +77,8 @@ runs:
             prerelease=""
             ;;
           "DEV_PRERELEASE")
-            patch=$((patch + 1))
             if [[ "${prerelease}" =~ ^dev([0-9]*)$ ]]; then
+              # If current version is already a dev prerelease, just increment the dev counter
               dev_number=${BASH_REMATCH[1]}
               if [ -z "${dev_number}" ]; then
                 dev_number=0
@@ -86,6 +86,8 @@ runs:
               dev_number=$((dev_number + 1))
               prerelease="dev${dev_number}"
             else
+              # Only increment patch if not already a dev prerelease
+              patch=$((patch + 1))
               prerelease="dev"
             fi
             ;;

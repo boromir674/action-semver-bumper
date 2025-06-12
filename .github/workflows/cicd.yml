@@ -113,7 +113,7 @@ jobs:
                 "sem_ver": "1.0.0-dev",
                 "bump_operator": "DEV_PRERELEASE"
               },
-              "expected_semver": "1.0.1-dev1"
+              "expected_semver": "1.0.0-dev1"
             },
             {
               "name": "TEST 4c: Dev Pre-release Bump from Dev Release (ie 1.2.1-dev2)",
@@ -121,7 +121,7 @@ jobs:
                 "sem_ver": "1.2.1-dev2",
                 "bump_operator": "DEV_PRERELEASE"
               },
-              "expected_semver": "1.2.2-dev3"
+              "expected_semver": "1.2.1-dev3"
             },
             {
               "name": "TEST 4d: 'major' Bump from 1.2.1-dev2",
