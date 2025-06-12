@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 
+## 1.1.1
+
+Previously: `1.0.0-dev` **(+)** `Dev_prerelease` -> `1.0.1-dev1`  
+Now: `1.0.0-dev` **(+)** `Dev_prerelease` -> `1.0.0-dev1`  
+
+> Unchanged behaviour when "current sem ver" does not contain pre release metadata
+> `1.0.0` **(+)** `Dev_prerelease` -> `1.0.1-dev`
+
+### Changes
+
+#### Fix
+
+- Refactored DEV_PRERELEASE operator to only increment patch when the current version is not already a dev release.
+
+
 ## 1.1.0
 
 ### Changes
