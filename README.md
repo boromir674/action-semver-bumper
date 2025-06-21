@@ -94,9 +94,16 @@ SEM_VER_INCREMENT_DEV_PRERELEASE_COUNTER --> NEW_SEM_VER
 
 ```
 
-## Features
+## ✨ Features
+
 - This Action acts as a pure Function (same input always yields same output).
 - **Does one thing** and does it **well**. Parsing of Conventional Commits, is out of scope!
+- **Smart Version Handling**:
+  - Properly increments MAJOR, MINOR, and PATCH versions
+  - Intelligently handles prerelease versions:
+    - When bumping from `1.0.0` to a dev release → `1.0.1-dev`
+    - When bumping from `1.0.0-dev` to a higher dev release → `1.0.0-dev1`
+- **Case-insensitive Operators** - Use `MAJOR`, `major`, or `Major` as needed
 
 ## Inputs
 
@@ -110,6 +117,29 @@ SEM_VER_INCREMENT_DEV_PRERELEASE_COUNTER --> NEW_SEM_VER
 | Output         | Description                                |
 |----------------|--------------------------------------------|
 | `new_sem_ver`  | The new Semantic Version after applying the bump operator. |
+
+
+## 🔄 Bump Operators
+
+This action supports four bump operators:
+
+| Operator | Effect | Example |
+|----------|--------|---------|
+| `MAJOR` | Increments the MAJOR version, resets MINOR and PATCH to 0 | `1.2.3` → `2.0.0` |
+| `MINOR` | Increments the MINOR version, resets PATCH to 0 | `1.2.3` → `1.3.0` |
+| `PATCH` | Increments the PATCH version | `1.2.3` → `1.2.4` |
+| `DEV_PRERELEASE` | Adds/increments dev prerelease identifier | See notes below |
+
+**Special behavior for `DEV_PRERELEASE`**:
+- For regular versions: increments PATCH and adds `-dev` suffix
+  - Example: `1.0.0` → `1.0.1-dev`
+- For existing dev prereleases: increments only the dev counter
+  - Example: `1.0.0-dev` → `1.0.0-dev1`, `1.0.0-dev1` → `1.0.0-dev2`
+
+### Additional Examples
+
+To see more examples of how this logic works, including detailed input and expected output for various operators, refer to the [CI/CD Pipeline configuration](.github/workflows/cicd.yml). This file contains multiple test cases that demonstrate the behavior of the action under different scenarios.
+
 
 ## Usage
 
