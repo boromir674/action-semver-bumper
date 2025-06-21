@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 
+## 1.1.2-dev (2025-06-21)
+
+### Changes
+
+#### docs
+
+- add new 'Bump Operators' section and more content in 'Features'
+
+
 ## 1.1.1
 
 Previously: `1.0.0-dev` **(+)** `Dev_prerelease` -> `1.0.1-dev1`  
