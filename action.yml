@@ -24,8 +24,8 @@ runs:
     # VERIFY INPUTS: sem_ver is a valid Semantic Version
     - name: "VERIFY INPUTS: sem_ver '${{ inputs.sem_ver }}' is a valid Semantic Version"
       run: |
-        if ! [[ "${{ inputs.sem_ver }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
-          echo "[ERROR] Input 'sem_ver', with value '${{ inputs.sem_ver }}', is NOT a valid Semantic Version."
+        if ! [[ "$INPUT_SEM_VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
+          echo "[ERROR] Input 'sem_ver', with value '$INPUT_SEM_VER', is NOT a valid Semantic Version."
           echo "[DEBUG] Action requires a Semantic Version in the format 'X.Y.Z' or 'X.Y.Z-dev'."
           echo "Exiting with error."
           exit 1
