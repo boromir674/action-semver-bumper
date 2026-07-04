@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 
+## 1.1.2-dev1 (2026-07-05)
+
+### Changes
+
+#### Test
+
+- Add **15 test cases**, including ones excercising unhappy paths
+
+
 ## 1.1.2-dev (2025-06-21)
 
 ### Changes
