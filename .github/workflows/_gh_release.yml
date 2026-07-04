@@ -26,7 +26,7 @@ jobs:
     name: 'GH Release'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Create a Github Release, from Tag on Master
         # To be consistent with already published GH Releases at time of writing (2024/01):

@@ -204,6 +204,22 @@ jobs:
               "expected_semver": "1.0.1"
             },
             {
+              "name": "TEST 7c: v-prefixed Major Bump",
+              "action_inputs": {
+                "sem_ver": "v1.2.3",
+                "bump_operator": "MAJOR"
+              },
+              "expected_semver": "2.0.0"
+            },
+            {
+              "name": "TEST 7d: v-prefixed Dev Prerelease Bump",
+              "action_inputs": {
+                "sem_ver": "v1.0.0",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.0.1-dev"
+            },
+            {
               "name": "TEST 8a: INVALID sem_ver missing patch",
               "action_inputs": {
                 "sem_ver": "1.2",

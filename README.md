@@ -112,6 +112,8 @@ SEM_VER_INCREMENT_DEV_PRERELEASE_COUNTER --> NEW_SEM_VER
 | `sem_ver`       | The current Semantic Version.                                               | `true`   |         |
 | `bump_operator` | The bump operator to apply. Valid values are `MAJOR`, `MINOR`, `PATCH`, `DEV_PRERELEASE` (case-insensitive). | `true`   |         |
 
+The `sem_ver` input also accepts a single leading `v`, so `v1.2.3` is normalized to `1.2.3` before processing.
+
 ## Outputs
 
 | Output         | Description                                |
@@ -156,7 +158,7 @@ jobs:
 
       - name: Bump Semantic Version
         id: bump_version
-        uses: boromir674/action-semver-bumper@v1.1.0
+        uses: boromir674/action-semver-bumper@v1.1.2
         with:
           sem_ver: '1.1.0'
           bump_operator: 'MINOR'  # Case-insensitive, also accepts 'minor'
@@ -174,7 +176,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump Major Version
   id: bump_major
-  uses: boromir674/action-semver-bumper@v1.1.0
+  uses: boromir674/action-semver-bumper@v1.1.2
   with:
     sem_ver: '1.0.0'
     bump_operator: 'MAJOR'  # Case-insensitive, also accepts 'major'
@@ -185,7 +187,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump Minor Version
   id: bump_minor
-  uses: boromir674/action-semver-bumper@v1.1.0
+  uses: boromir674/action-semver-bumper@v1.1.2
   with:
     sem_ver: '1.0.0'
     bump_operator: 'Minor'  # Case-insensitive, also accepts 'MINOR'
@@ -196,7 +198,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump Patch Version
   id: bump_patch
-  uses: boromir674/action-semver-bumper@v1.1.0
+  uses: boromir674/action-semver-bumper@v1.1.2
   with:
     sem_ver: '1.0.0'
     bump_operator: 'patch'  # Case-insensitive, also accepts 'PATCH'
@@ -207,7 +209,7 @@ The action supports case-insensitive bump operators, so you can use both upperca
 ```yaml
 - name: Bump with Dev Prerelease
   id: bump_dev_prerelease
-  uses: boromir674/action-semver-bumper@v1.1.0
+  uses: boromir674/action-semver-bumper@v1.1.2
   with:
     sem_ver: '1.0.0'
     bump_operator: 'dev_prerelease'  # Case-insensitive, also accepts 'DEV_PRERELEASE'

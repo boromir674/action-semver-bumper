@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](https://semver.org/).
 
 
+## 1.1.2 (2026-07-05)
+
+### Changes
+
+#### Feature
+
+- Accept `v1.2.3`-style Semantic Versions by normalizing a single leading `v` before processing.
+
+#### Docs
+
+- Refresh usage references for the `1.1.2` release.
+
+
 ## 1.1.2-dev1 (2026-07-05)
 
 ### Changes
