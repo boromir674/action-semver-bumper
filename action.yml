@@ -21,10 +21,21 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # VERIFY INPUTS: sem_ver is a valid Semantic Version
-    - name: "VERIFY INPUTS: sem_ver '${{ inputs.sem_ver }}' is a valid Semantic Version"
+    # NORMALIZE INPUTS: allow a single leading 'v' on sem_ver
+    - name: "NORMALIZE INPUTS: sem_ver '${{ inputs.sem_ver }}'"
+      id: normalize_sem_ver
       run: |
-        if ! [[ "${{ inputs.sem_ver }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
+        SEM_VER="${{ inputs.sem_ver }}"
+        if [[ "${SEM_VER}" == v* ]]; then
+          SEM_VER="${SEM_VER#v}"
+        fi
+        echo "sem_ver=${SEM_VER}" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    # VERIFY INPUTS: sem_ver is a valid Semantic Version
+    - name: "VERIFY INPUTS: sem_ver '${{ steps.normalize_sem_ver.outputs.sem_ver }}' is a valid Semantic Version"
+      run: |
+        if ! [[ "${{ steps.normalize_sem_ver.outputs.sem_ver }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+)?$ ]]; then
           echo "[ERROR] Input 'sem_ver', with value '${{ inputs.sem_ver }}', is NOT a valid Semantic Version."
           echo "[DEBUG] Action requires a Semantic Version in the format 'X.Y.Z' or 'X.Y.Z-dev'."
           echo "Exiting with error."
@@ -48,7 +59,7 @@ runs:
     - name: "BUMP VERSION"
       id: bump_version
       env:
-        SEM_VER: ${{ inputs.sem_ver }}
+        SEM_VER: ${{ steps.normalize_sem_ver.outputs.sem_ver }}
         BUMP_OPERATOR: ${{ inputs.bump_operator }}
       run: |
         IFS='-' read -r version prerelease <<< "${SEM_VER}"
