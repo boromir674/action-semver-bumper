@@ -35,7 +35,7 @@ jobs:
       ENVIRONMENT_NAME: ${{ steps.set_environment_name.outputs.ENVIRONMENT_NAME }}
     steps:
       # Fetch 'main' and 'release' branches
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ env.MAIN_BR }}
