@@ -24,23 +24,42 @@ jobs:
         run: |
           echo 'Current Sem Ver: ${{ matrix.test_data.action_inputs.sem_ver }}'
           echo 'Bump Operator: ${{ matrix.test_data.action_inputs.bump_operator }}'
-          echo 'Expected Sem Ver: ${{ matrix.test_data.expected_semver }}'
+          echo 'Expected Sem Ver: ${{ matrix.test_data.expected_semver || '' }}'
+          echo 'Should Fail: ${{ matrix.test_data.should_fail || false }}'
 
       # WHEN the Action runs, with valid input Sem Ver and Bump Operator
       - name: WHEN Action Runs, with valid input Sem Ver and Bump Operator
         id: run_action
+        # support test cases where we expect error to be thrown, by not failing job when this step fails
+        continue-on-error: true
         uses: boromir674/action-semver-bumper@dev
         with:
           sem_ver: ${{ matrix.test_data.action_inputs.sem_ver }}
           bump_operator: ${{ matrix.test_data.action_inputs.bump_operator }}
 
-      # THEN the Action should return the expected Sem Ver
-      - name: ASSERT Action returns the expected Sem Ver '${{ matrix.test_data.expected_semver }}'
+      # THEN assert either expected success output or expected failure
+      - name: ASSERT Test Case Outcome
         run: |
-          if [ "${{ steps.run_action.outputs.new_sem_ver }}" = "${{ matrix.test_data.expected_semver }}" ]; then
-            echo "Action Returned Value is AS expected :)"
+          if [ "${{ matrix.test_data.should_fail || false }}" = "true" ]; then
+            if [ "${{ steps.run_action.outcome }}" = "failure" ]; then
+              echo "Action failed as expected :)"
+            else
+              echo "Action was expected to fail, but it succeeded!"
+              echo [ASSERTION ERROR] "Outcome: ${{ steps.run_action.outcome }}"
+              exit 1
+            fi
           else
-            echo "Action Return Value is NOT as expected!"
-            echo [ASSERTION ERROR] "Actual: ${{ steps.run_action.outputs.new_sem_ver }} | Expected: ${{ matrix.test_data.expected_semver }}"
-            exit 1
+            if [ "${{ steps.run_action.outcome }}" != "success" ]; then
+              echo "Action was expected to succeed, but failed!"
+              echo [ASSERTION ERROR] "Outcome: ${{ steps.run_action.outcome }}"
+              exit 1
+            fi
+
+            if [ "${{ steps.run_action.outputs.new_sem_ver }}" = "${{ matrix.test_data.expected_semver }}" ]; then
+              echo "Action Returned Value is AS expected :)"
+            else
+              echo "Action Return Value is NOT as expected!"
+              echo [ASSERTION ERROR] "Actual: ${{ steps.run_action.outputs.new_sem_ver }} | Expected: ${{ matrix.test_data.expected_semver }}"
+              exit 1
+            fi
           fi

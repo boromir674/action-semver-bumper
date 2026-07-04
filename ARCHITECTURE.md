@@ -22,6 +22,7 @@ Core runtime lives in `action.yml` using bash steps.
 ## CI/CD Design
 
 - Entry pipeline: `.github/workflows/cicd.yml`.
+- Test suite: matrix scenarios declared in `cicd.yml` and executed by reusable workflow `.github/workflows/_test.yml`.
 - Test execution is reusable: `.github/workflows/_test.yml`.
 - Test strategy: JSON matrix of GIVEN/WHEN/THEN cases.
 - Quality gate job aggregates upstream job outcomes.

@@ -27,8 +27,9 @@ Contributions should preserve this focus.
 
 ## Testing
 
+- Test suite in this project means: the CI matrix in `.github/workflows/cicd.yml` + the reusable runner in `.github/workflows/_test.yml`.
 - The action is validated through matrix-based workflow tests in `.github/workflows/_test.yml`.
-- Each test defines `sem_ver`, `bump_operator`, and `expected_semver`.
+- Each test defines `sem_ver`, `bump_operator`, and expected outcome (`expected_semver` or `should_fail`).
 - PRs should preserve existing cases and add new ones for edge conditions.
 
 ## Style

@@ -31,7 +31,7 @@ This action provides deterministic, automation-friendly SemVer bumping.
 - Pure-function mindset: same input, same output.
 - Single responsibility: no commit parsing, no release orchestration.
 - Low integration friction: drop-in composite action.
-- Tested Github Action 
+- Test suite backed: behavior is validated by CI matrix scenarios.
 
 ## Non-Goals
 

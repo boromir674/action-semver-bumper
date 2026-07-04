@@ -130,6 +130,126 @@ jobs:
                 "bump_operator": "major"
               },
               "expected_semver": "2.0.0"
+            },
+            {
+              "name": "TEST 5a: Zero Version Major Bump",
+              "action_inputs": {
+                "sem_ver": "0.0.0",
+                "bump_operator": "MAJOR"
+              },
+              "expected_semver": "1.0.0"
+            },
+            {
+              "name": "TEST 5b: Zero Version Minor Bump",
+              "action_inputs": {
+                "sem_ver": "0.0.0",
+                "bump_operator": "MINOR"
+              },
+              "expected_semver": "0.1.0"
+            },
+            {
+              "name": "TEST 5c: Zero Version Patch Bump",
+              "action_inputs": {
+                "sem_ver": "0.0.0",
+                "bump_operator": "PATCH"
+              },
+              "expected_semver": "0.0.1"
+            },
+            {
+              "name": "TEST 5d: Zero Version Dev Pre-release Bump",
+              "action_inputs": {
+                "sem_ver": "0.0.0",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "0.0.1-dev"
+            },
+            {
+              "name": "TEST 6a: Dev Counter starts at implicit zero",
+              "action_inputs": {
+                "sem_ver": "1.0.0-dev",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.0.0-dev1"
+            },
+            {
+              "name": "TEST 6b: Dev Counter starts at explicit zero",
+              "action_inputs": {
+                "sem_ver": "1.0.0-dev0",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.0.0-dev1"
+            },
+            {
+              "name": "TEST 6c: High Dev Counter increments",
+              "action_inputs": {
+                "sem_ver": "1.0.0-dev99",
+                "bump_operator": "DEV_PRERELEASE"
+              },
+              "expected_semver": "1.0.0-dev100"
+            },
+            {
+              "name": "TEST 7a: Mixed Case Operator 'Patch'",
+              "action_inputs": {
+                "sem_ver": "1.0.0",
+                "bump_operator": "Patch"
+              },
+              "expected_semver": "1.0.1"
+            },
+            {
+              "name": "TEST 7b: Random Case Operator 'pAtCh'",
+              "action_inputs": {
+                "sem_ver": "1.0.0",
+                "bump_operator": "pAtCh"
+              },
+              "expected_semver": "1.0.1"
+            },
+            {
+              "name": "TEST 8a: INVALID sem_ver missing patch",
+              "action_inputs": {
+                "sem_ver": "1.2",
+                "bump_operator": "PATCH"
+              },
+              "should_fail": true
+            },
+            {
+              "name": "TEST 8b: INVALID sem_ver non-numeric",
+              "action_inputs": {
+                "sem_ver": "a.b.c",
+                "bump_operator": "MINOR"
+              },
+              "should_fail": true
+            },
+            {
+              "name": "TEST 8c: INVALID sem_ver empty prerelease",
+              "action_inputs": {
+                "sem_ver": "1.2.3-",
+                "bump_operator": "PATCH"
+              },
+              "should_fail": true
+            },
+            {
+              "name": "TEST 9a: INVALID bump operator typo",
+              "action_inputs": {
+                "sem_ver": "1.2.3",
+                "bump_operator": "MAJR"
+              },
+              "should_fail": true
+            },
+            {
+              "name": "TEST 9b: INVALID bump operator empty",
+              "action_inputs": {
+                "sem_ver": "1.2.3",
+                "bump_operator": ""
+              },
+              "should_fail": true
+            },
+            {
+              "name": "TEST 9c: INVALID bump operator with whitespace",
+              "action_inputs": {
+                "sem_ver": "1.2.3",
+                "bump_operator": " PATCH"
+              },
+              "should_fail": true
             }
           ]
         }
